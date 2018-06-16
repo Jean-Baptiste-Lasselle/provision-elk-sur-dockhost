@@ -16,63 +16,10 @@ Cette recette a pour dépendances:
 * GIT 
 * La recette de provision d'un [hôte docker centos](https://github.com/Jean-Baptiste-Lasselle/provision-hote-docker-sur-centos)
 
-# Prinicpe
-
-
-
-
-## Scenario 1
-
-Une "fausse" application tournant dans un tomcat dans un conteneur Docker:
-Ce conteneur ne fait "que s'exécuter" et on peut utiliser la commande:
-
-```
-docker exec -it $NOM_CONTNEUR /bin/bash -c "echo \"nouvelle ligne de log de ma fausse application\" \>\> /opt/petit-duc/petit-duc.log"
-```
-
-On souhaite parcourir les logs avec Elastic Stack et FileBeats.
-
-Les filebeat seront installés :
-
-- Dans des conteneurs Docker : le filebeat est installé directement dans le conteneur Docker qui contient l'application dont on souhaite surveiller les logs
-- Sur l'hôte de conteneurisation : le filetbeat est installé sur l'hôte de conteneurisation, et le conteneur de l'application expose un volume docker dans lequel sont stocké les logs applicatifs.
-
-- Sur une VM différente "BeatVM": le filebeat est installé sur une VM "BeatVM", disctincte de l'hôte de conteneurisation. De plus, dans "BeatVM", un serveur NFS est installé, et un répertoire est ainsi partagé avec le conteneur applicatif.
-- Sur une VM différente "BeatVM": le filebeat est installé sur une VM "BeatVM", disctincte de l'hôte de conteneurisation. De plus, dans "BeatVM", un serveur NFS est installé, et un répertoire est ainsi partagé avec non plus 1, mais 2 conteneurs contenant chacun une application différente.
-
-## Scenario 2
-
-Une application Web Jee tournant dans un tomcat dans un conteneur Docker.
-On souhaite parcourir les logs avec Elastic Stack et FileBeats.
-
-Les filebeat seront installés :
-
-- Dans des conteneurs Docker : le filebeat est installé directement dans le conteneur Docker qui contient l'application dont on souhaite surveiller les logs
-- Sur l'hôte de conteneurisation : le filetbeat est installé sur l'hôte de conteneurisation, et le conteneur de l'application expose un volume docker dans lequel sont stocké les logs applicatifs.
-
-- Sur une VM différente "BeatVM": le filebeat est installé sur une VM "BeatVM", disctincte de l'hôte de conteneurisation. De plus, dans "BeatVM", un serveur NFS est installé, et un répertoire est ainsi partagé avec le conteneur applicatif.
-- Sur une VM différente "BeatVM": le filebeat est installé sur une VM "BeatVM", disctincte de l'hôte de conteneurisation. De plus, dans "BeatVM", un serveur NFS est installé, et un répertoire est ainsi partagé avec non plus 1, mais 2 conteneurs contenant chacun une application différente.
-
-## Scenario 3
-
-2 applications : 1 Web Jee tournant dans un tomcat dans un conteneur Docker, l'autre est une application java exécutant un jar exécutable.
-CEs  2 applications ont contenues dans 2 conteneurs: k'un 
-On souhaite parcourir les logs avec Elastic Stack et FileBeats.
-
-Les filebeat seront installés :
-
-- Dans des conteneurs Docker : le filebeat est installé directement dans le conteneur Docker qui contient l'application dont on souhaite surveiller les logs
-- Sur l'hôte de conteneurisation : le filetbeat est installé sur l'hôte de conteneurisation, et le conteneur de l'application expose un volume docker dans lequel sont stocké les logs applicatifs.
-
-- Sur une VM différente "BeatVM": le filebeat est installé sur une VM "BeatVM", disctincte de l'hôte de conteneurisation. De plus, dans "BeatVM", un serveur NFS est installé, et un répertoire est ainsi partagé avec le conteneur applicatif.
-- Sur une VM différente "BeatVM": le filebeat est installé sur une VM "BeatVM", disctincte de l'hôte de conteneurisation. De plus, dans "BeatVM", un serveur NFS est installé, et un répertoire est ainsi partagé avec non plus 1, mais 2 conteneurs contenant chacun une application différente.
-
-
 
 # Utilisation
 
-Pour utiliser cette recette, vous pourrez d'abord provisionner un systyème ELK, puis provisionner une application JAva Jee dans un serveur tomcat, faisant usage d'une base de données mariadb.
-Cette application pourra donc donner lieu à une surpervision des logs par le système ELK.
+
 
 ## Provision du système ELK 
 
@@ -80,7 +27,7 @@ Exécutez:
 
 ```
 export PROVISIONING_HOME 
-PROVISIONING_HOME=$(pwd)/provision-app-plus-elk
+PROVISIONING_HOME=$(pwd)/provision-elk-sur-dockhost
 rm -rf $PROVISIONING_HOME
 mkdir -p $PROVISIONING_HOME
 cd $PROVISIONING_HOME
@@ -90,7 +37,7 @@ sudo chmod +x ./operations.sh
 ```
 Ou encore, en une seule ligne:
 ```
-export PROVISIONING_HOME && PROVISIONING_HOME=$(pwd)/provision-app-plus-elk && rm -rf $PROVISIONING_HOME && mkdir -p $PROVISIONING_HOME && cd $PROVISIONING_HOME && git clone "https://github.com/Jean-Baptiste-Lasselle/elastic-stack-tuto" . && sudo chmod +x ./operations.sh && ./operations.sh
+export PROVISIONING_HOME && PROVISIONING_HOME=$(pwd)/provision-elk-sur-dockhost && rm -rf $PROVISIONING_HOME && mkdir -p $PROVISIONING_HOME && cd $PROVISIONING_HOME && git clone "https://github.com/Jean-Baptiste-Lasselle/elastic-stack-tuto" . && sudo chmod +x ./operations.sh && ./operations.sh
 ```
 
 
@@ -154,8 +101,8 @@ Couln't start Elasticsearch. Exiting.
 Elasticsearch log follows below.
 [2018-06-07T05:26:21,574][INFO ][o.e.n.Node               ] [] initializing ...
 [2018-06-07T05:26:21,633][INFO ][o.e.e.NodeEnvironment    ] [yfKmdTg] using [1] data paths, mounts [[/var/lib/elasticsearch (/dev/mapper/centos-root)]], net usable_space [44.6gb], net total_space [48gb], types [xfs]
-[jibl@pc-65 provision-app-plus-elk]$ clear
-[jibl@pc-65 provision-app-plus-elk]$ sudo docker logs 6033f08809ef|more
+[jibl@pc-65 provision-elk-sur-dockhost]$ clear
+[jibl@pc-65 provision-elk-sur-dockhost]$ sudo docker logs 6033f08809ef|more
  * Starting periodic command scheduler cron                              [ OK ]
  * Starting Elasticsearch Server                                         [ OK ]
 waiting for Elasticsearch to be up (1/30)
@@ -249,7 +196,7 @@ L'utilisateur jibl peut utiliser les commandes suivantes sur pc-65 :
 
 # Sources d'information diverses
 
-Les sources d'informations scannées par ce repo:
+
 
 
 * REALEASE 0.0.1 : https://elk-docker.readthedocs.io
