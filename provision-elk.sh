@@ -8,7 +8,9 @@
 # - Environnement hérité
 # - 
 # 
+export NOM_IMAGE_ELK1=sebp/elk
 # export NOM_CONTENEUR_ELK1=conteneur-elk-jibl
+export NOM_CONTENEUR_ELK1=conteneur-elk-jibl2
 # -----------------------------------------------------------------------------------------------------------------------
 
 
@@ -26,4 +28,5 @@ sudo docker pull sebp/elk
 
 # on lance un conteneur
 # sudo docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 -it --name $NOM_CONTENEUR_ELK1 $NOM_IMAGE_ELK1
-sudo docker run -it --name $NOM_CONTENEUR_ELK1 -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 9300:9300 $NOM_IMAGE_ELK1
+# sudo docker run -it --name $NOM_CONTENEUR_ELK1 -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 9300:9300 $NOM_IMAGE_ELK1
+sudo docker run --restart=always --name $NOM_CONTENEUR_ELK1 -p 5601:5601 -p 9200:9200 -p 5044:5044 -p 9300:9300 -d $NOM_IMAGE_ELK1

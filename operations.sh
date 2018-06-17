@@ -119,6 +119,32 @@ checkHealth () {
 	fi
 	done	
 }
+# ---------------------------------------------------------
+# [description]
+# ---------------------------------------------------------
+# Cette fonction permet d'attendre que le
+# conteneur soit dans l'état running
+# Cette fonction prend un argument, nécessaire
+# sinon une erreur est générée (TODO: à implémenter avec
+# exit code)
+checkDockerContainerRunningStatus() {
+	export ETATCOURANTCONTENEUR=starting
+	export ETATCONTENEURPRET=running
+	export NOM_DU_CONTENEUR_INSPECTE=$1
+	
+	while  $(echo "+provision+girofle+ $NOM_DU_CONTENEUR_INSPECTE - HEALTHCHECK: [$ETATCOURANTCONTENEUR]">> $NOMFICHIERLOG); do
+	
+	ETATCOURANTCONTENEUR=$(sudo docker inspect -f '{{json .State.Status}}' $NOM_DU_CONTENEUR_INSPECTE)
+	if [ $ETATCOURANTCONTENEUR == "\"$ETATCONTENEURPRET\"" ]
+	then
+		echo " +++provision+ elk +  $NOM_DU_CONTENEUR_INSPECTE est prêt - STATUS: [$ETATCOURANTCONTENEUR]">> $NOMFICHIERLOG
+		break;
+	else
+		echo " +++provision+ elk +  $NOM_DU_CONTENEUR_INSPECTE n'est pas prêt - STATUS: [$ETATCOURANTCONTENEUR] - attente d'une seconde avant prochain HealthCheck - ">> $NOMFICHIERLOG
+		sleep 1s
+	fi
+	done	
+}
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 ##############################################################################################################################################
@@ -149,8 +175,7 @@ echo " "
 echo " " >> $NOMFICHIERLOG
 echo "##########################################################" >> $NOMFICHIERLOG
 echo "##########################################################" >> $NOMFICHIERLOG
-echo "# Setup Tutoriel ELK en cours..." >> $NOMFICHIERLOG
-echo " 		[ADRESSE_IP_HOTE_DOCKER_ELK=$ADRESSE_IP_HOTE_DOCKER_ELK]" >> $NOMFICHIERLOG
+echo "########### Installation ELK en cours..." >> $NOMFICHIERLOG
 echo "##########################################################" >> $NOMFICHIERLOG
 echo " " >> $NOMFICHIERLOG
 clear
@@ -176,7 +201,7 @@ ajusterLeSystemSpecialementPourELK
 ./provision-elk.sh >> $NOMFICHIERLOG
 
 # 2. healthcheck
-checkHealth $NOM_CONTENEUR_ELK1
+checkDockerContainerRunningStatus $NOM_CONTENEUR_ELK1
 echo "########### "
 echo "########### "
 echo "########### Installation ELK terminée."
