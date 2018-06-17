@@ -8,9 +8,9 @@
 # - Environnement hérité
 # - 
 # 
-export NOM_IMAGE_ELK1=sebp/elk
+# export NOM_IMAGE_ELK1=sebp/elk
 # export NOM_CONTENEUR_ELK1=conteneur-elk-jibl
-export NOM_CONTENEUR_ELK1=conteneur-elk-jibl2
+# export NOM_CONTENEUR_ELK1=conteneur-elk-jibl2
 # -----------------------------------------------------------------------------------------------------------------------
 
 
