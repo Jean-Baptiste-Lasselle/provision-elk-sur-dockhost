@@ -200,8 +200,8 @@ ajusterLeSystemSpecialementPourELK
 # 1. provision ELK 
 ./provision-elk.sh >> $NOMFICHIERLOG
 
-# 2. healthcheck
-checkHealth $NOM_CONTENEUR_ELK1
+# 2. healthcheck / checkDockerContainerRunningStatus
+# checkHealth $NOM_CONTENEUR_ELK1
 checkDockerContainerRunningStatus $NOM_CONTENEUR_ELK1
 echo "########### "
 echo "########### "
