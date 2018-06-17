@@ -208,3 +208,10 @@ echo "########### "
 echo "########### Installation ELK terminée."
 echo "########### "
 
+echo " " >> $NOMFICHIERLOG
+echo "##########################################################" >> $NOMFICHIERLOG
+echo "##########################################################" >> $NOMFICHIERLOG
+echo "########### Installation ELK en terminée." >> $NOMFICHIERLOG
+echo "##########################################################" >> $NOMFICHIERLOG
+echo " " >> $NOMFICHIERLOG
+clear
