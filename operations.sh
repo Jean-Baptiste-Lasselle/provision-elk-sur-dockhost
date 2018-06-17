@@ -18,7 +18,7 @@ MAISON_OPERATIONS=$(pwd)
 
 # -
 export NOMFICHIERLOG
-NOMFICHIERLOG="$(pwd)/provision-app-plus-elk.log"
+NOMFICHIERLOG="$(pwd)/provision-elk.log"
 
 
 
